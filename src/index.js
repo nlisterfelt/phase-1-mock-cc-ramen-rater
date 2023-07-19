@@ -6,6 +6,25 @@ document.addEventListener('DOMContentLoaded', ()=>{
         data.forEach(ramen=>addRamen(ramen))
     })
 
+    const form = document.getElementById('new-ramen')
+    form.addEventListener('submit', e=>{
+        e.preventDefault()
+        const newInfo = e.target.elements
+        ramenObj = {
+            name: newInfo[0].value,
+            restaurant: newInfo[1].value,
+            image: newInfo[2].value,
+            rating: newInfo[3].value,
+            comment: newInfo[4].value
+        }
+        fetch('http://localhost:3000/ramens', {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify(ramenObj)
+        })
+        .then(resp=>resp.json())
+        .then(data=>{addRamen({id: data.id, ...ramenObj})})
+    })
 })
 
 function addRamen(ramen){
